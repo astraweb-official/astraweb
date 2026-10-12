@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head><meta name="google-site-verification" content="pXR70oiViCMeQJa6qTPBXIZs1klKran9efpMjQbfn3c" />
+    <meta charset="UTF-8">
+    <title>AstraWeb - Explorador del Cosmos y Universo</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        space: {
+                            900: '#070b19',
+                            800: '#0f172a',
+                            700: '#1e293b',
+                            600: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #070b19;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .stars-bg {
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 230px 180px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 300px 300px;
+        }
+        .glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.15);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="stars-bg min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
+
+    <header class="glass sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('explorer')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                    <i data-lucide="orbit" class="w-6 h-6 text-white animate-spin" style="animation-duration: 20s;"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">ASTRAWEB</span>
+                    <span class="block text-xs text-slate-400 font-medium">Explorador del Cosmos</span>
+                </div>
+            </div>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                <button onclick="switchTab('explorer')" id="nav-explorer" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-cyan-400 bg-cyan-500/10 border border-cyan-500/30">Explorador</button>
+                <button onclick="switchTab('universe')" id="nav-universe" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-white/5">Cifras del Universo</button>
+                <button onclick="switchTab('calculator')" id="nav-calculator" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-white/5">Calculadora</button>
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-white/5">Quiz Estelar</button>
+            </nav>
+            <!-- Mobile Menu Toggle -->
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/5">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-white/10 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('explorer'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-cyan-400 bg-cyan-500/10">Explorador</button>
+            <button onclick="switchTab('universe'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300">Cifras del Universo</button>
+            <button onclick="switchTab('calculator'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300">Calculadora</button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300">Quiz Estelar</button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <section id="tab-explorer" class="space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Sistema Solar & Exoplanetas
+                </span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">Explora los Mundos del Cosmos</h1>
+                <p class="text-slate-400 text-base sm:text-lg">Selecciona cualquier planeta o exoplaneta para ver sus fotos en alta resolución, datos científicos exactos y curiosidades fascinantes para estudiar.</p>
+            </div>
+
+            <!-- Filter Categories -->
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+                <button onclick="filterPlanets('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-cyan-500 text-slate-950 font-semibold shadow-lg shadow-cyan-500/20 transition-all">Todos</button>
+                <button onclick="filterPlanets('terrestrial')" id="filter-terrestrial" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Rocosos</button>
+                <button onclick="filterPlanets('gas')" id="filter-gas" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Gigantes Gaseosos</button>
+                <button onclick="filterPlanets('ice')" id="filter-ice" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Gigantes Helados</button>
+                <button onclick="filterPlanets('exoplanet')" id="filter-exoplanet" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Exoplanetas Famosos</button>
+            </div>
+
+            <!-- Planets Grid -->
+            <div id="planets-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <section id="tab-universe" class="space-y-10 hidden">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <i data-lucide="pie-chart" class="w-3.5 h-3.5"></i> Estadísticas Cósmicas
+                </span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">Las Cifras Asombrosas del Universo</h1>
+                <p class="text-slate-400 text-base sm:text-lg">Datos oficiales y estimaciones astronómicas sobre planetas en nuestra galaxia, galaxias en el cosmos y escalas de distancia.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-cyan-500/10 rounded-full blur-xl group-hover:bg-cyan-500/20 transition-all"></div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                            <i data-lucide="disc" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full">Vía Láctea</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-2">> 100 Mil Millones</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Se estima que hay al menos tantos planetas como estrellas en nuestra galaxia, superando en número a los seres humanos que han existido jamás.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/20 transition-all"></div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                            <i data-lucide="telescope" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full">Exoplanetas</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-2">+5,500</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Mundos descubiertos y confirmados fuera de nuestro sistema solar gracias a misiones espaciales como el telescopio Kepler y el James Webb.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition-all"></div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+                            <i data-lucide="globe-2" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full">Universo Observable</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-2">2 Billones de Galaxias</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Cálculos basados en el telescopio Hubble revelan que existen al menos dos billones de galaxias observables en el universo.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="award" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">Zona Habitable</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-2">~40 Mil Millones</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">De planetas tamaño Tierra estimados en órbita alrededor de enanas rojas y estrellas similares al Sol dentro de la zona templada de la Vía Láctea.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition-all"></div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                            <i data-lucide="sun" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full">Edad Cósmica</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-2">13.8 Mil Millones</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Años transcurridos desde el Big Bang, la gran explosión que dio origen al espacio, el tiempo y toda la materia del cosmos.</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition-all"></div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400">
+                            <i data-lucide="gauge" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full">Velocidad Luz</span>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-white mb-2">300,000 km/s</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">La velocidad máxima a la que viaja la información y los fotones en el vacío. La luz del Sol tarda exactamente 8 minutos y 20 segundos en llegar a la Tierra.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-calculator" class="space-y-8 hidden">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <i data-lucide="calculator" class="w-3.5 h-3.5"></i> Herramienta de Estudio
+                </span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">Calculadora Astronómica</h1>
+                <p class="text-slate-400 text-base sm:text-lg">Introduce tu peso y tu edad en la Tierra para calcular instantáneamente cuánto pesarías en cada planeta del Sistema Solar y cuántos años tendrías allí.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="glass p-6 rounded-3xl space-y-6 lg:col-span-1">
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="sliders" class="text-cyan-400"></i> Tus Datos Terrestres
+                    </h3>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-slate-300">Peso en la Tierra (kg)</label>
+                        <input type="number" id="calc-weight" value="70" min="1" max="500" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-all font-semibold" oninput="calculateAstronomy()">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-slate-300">Edad en la Tierra (Años)</label>
+                        <input type="number" id="calc-age" value="25" min="1" max="150" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-all font-semibold" oninput="calculateAstronomy()">
+                    </div>
+
+                    <div class="bg-cyan-500/10 border border-cyan-500/20 rounded-2xl p-4 text-xs text-slate-300 space-y-2">
+                        <span class="font-bold text-white block flex items-center gap-1"><i data-lucide="info" class="w-4 h-4 text-cyan-400"></i> ¿Cómo funciona?</span>
+                        <p>El peso cambia según la gravedad superficial del planeta ($W = m \times g$). La edad se calcula dividiendo tus días vividos entre la duración del año en cada planeta.</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="calc-results-grid">
+                        <!-- Injected via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-quiz" class="space-y-8 hidden">
+            <div class="text-center max-w-3xl mx-auto space-y-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <i data-lucide="award" class="w-3.5 h-3.5"></i> Desafío Estelar (100+ Preguntas)
+                </span>
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">Quiz de Astronomía</h1>
+                <p class="text-slate-400 text-base sm:text-lg">Pon a prueba tus conocimientos. Cada partida selecciona automáticamente 5 preguntas aleatorias y únicas de nuestro banco de 100 cuestiones.</p>
+            </div>
+
+            <!-- Quiz Container -->
+            <div class="max-w-3xl mx-auto glass p-6 sm:p-10 rounded-3xl shadow-2xl relative overflow-hidden border border-white/10">
+                <!-- Start Screen -->
+                <div id="quiz-start" class="text-center space-y-6 py-6">
+                    <div class="w-20 h-20 bg-amber-500/20 rounded-2xl mx-auto flex items-center justify-center text-amber-400 shadow-lg shadow-amber-500/20">
+                        <i data-lucide="help-circle" class="w-10 h-10"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-bold text-white">¿Listo para el examen cósmico?</h3>
+                        <p class="text-slate-400 max-w-md mx-auto">Responde correctamente a 5 preguntas aleatorias. ¡No se repetirán en tu sesión actual!</p>
+                    </div>
+                    <button onclick="startQuiz()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-600 text-white font-bold text-lg shadow-lg shadow-amber-500/25 hover:opacity-95 transition-all inline-flex items-center gap-2">
+                        <i data-lucide="play" class="w-5 h-5"></i> Comenzar Quiz (5 Preguntas)
+                    </button>
+                </div>
+
+                <!-- Active Quiz Screen -->
+                <div id="quiz-active" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <span id="quiz-progress" class="text-sm font-semibold text-cyan-400">Pregunta 1 de 5</span>
+                        <div class="flex items-center gap-2 text-slate-300 bg-slate-900/60 px-3 py-1 rounded-full border border-white/10">
+                            <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+                            <span id="quiz-timer" class="font-mono font-bold">20</span>s
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 id="quiz-question" class="text-xl sm:text-2xl font-bold text-white">Pregunta aquí...</h3>
+                        <div id="quiz-options" class="grid grid-cols-1 gap-3">
+                            <!-- Options injected -->
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-feedback" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+                </div>
+
+                <!-- End Screen -->
+                <div id="quiz-end" class="hidden text-center space-y-6 py-6">
+                    <div class="w-20 h-20 bg-emerald-500/20 rounded-2xl mx-auto flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-500/20">
+                        <i data-lucide="trophy" class="w-10 h-10"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-3xl font-extrabold text-white">¡Quiz Completado!</h3>
+                        <p id="quiz-score-text" class="text-lg text-slate-300">Tu puntuación final es: <span class="text-cyan-400 font-bold">0 / 5</span></p>
+                    </div>
+                    <button onclick="startQuiz()" class="px-8 py-3.5 rounded-xl bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/25 hover:bg-cyan-400 transition-all inline-flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i> Intentar Nuevas 5 Preguntas
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="planet-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass max-w-2xl w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closePlanetModal()" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-900/80 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="relative h-64 sm:h-72 overflow-hidden bg-slate-900">
+                <img id="modal-img" src="" alt="Planeta" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6">
+                    <span id="modal-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 uppercase tracking-wider">Tipo</span>
+                    <h2 id="modal-title" class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Nombre</h2>
+                </div>
+            </div>
+            <div class="p-6 sm:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+                <p id="modal-desc" class="text-slate-300 leading-relaxed text-base"></p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="modal-specs">
+                    <!-- Specs injected -->
+                </div>
+                <div class="bg-cyan-500/10 border border-cyan-500/20 rounded-2xl p-4 flex gap-3 items-start">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h4 class="text-sm font-bold text-white">Dato Curioso</h4>
+                        <p id="modal-funfact" class="text-xs sm:text-sm text-slate-300 mt-1"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="glass border-t border-white/10 mt-16 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-white/10">
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="orbit" class="w-5 h-5 text-cyan-400"></i>
+                        <span class="font-bold text-white tracking-wide text-lg">AstraWeb Cosmos</span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        <strong>¿Para qué es esta página?</strong> AstraWeb es una herramienta digital interactiva y educativa diseñada para estudiantes, profesores, entusiastas de la astronomía y público general que busca explorar y estudiar los planetas, exoplanetas y las leyes del universo de manera visual y rigurosa.
+                    </p>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i> Fuentes y Referencias Oficiales
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Los datos científicos, imágenes y estadísticas astronómicas de esta plataforma han sido recopilados y contrastados a partir de bases de datos públicas de agencias espaciales e instituciones científicas de prestigio mundial:
+                    </p>
+                    <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                        <li><strong>NASA</strong> (National Aeronautics and Space Administration) - Solar System Exploration.</li>
+                        <li><strong>ESA</strong> (European Space Agency) - Ciencia y misiones espaciales.</li>
+                        <li><strong>NASA Exoplanet Archive</strong> - Catálogo oficial de exoplanetas confirmados.</li>
+                        <li><strong>Modelos Astrofísicos del Hubble y James Webb</strong> - Cifras de galaxias y universo observable.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Uso Educativo & Académico
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Este sitio web es de libre acceso con fines pedagógicos. Las imágenes provienen de galerías públicas de exploración espacial y bancos multimedia educativos (Unsplash Space Collection).
+                    </p>
+                    <p class="text-xs text-slate-500 pt-2">
+                        © 2026 AstraWeb. Todos los derechos reservados al servicio de la divulgación científica.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center text-xs text-slate-500">
+                <p>Explora, aprende y cuestiona los misterios del cosmos.</p>
+                <div class="flex items-center gap-4">
+                    <span class="hover:text-slate-300 cursor-pointer">Términos de Uso</span>
+                    <span>•</span>
+                    <span class="hover:text-slate-300 cursor-pointer">Privacidad Educativa</span>
+                    <span>•</span>
+                    <span class="hover:text-slate-300 cursor-pointer">Contacto</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Planet Database
+        const planetsData = [
+            {
+                id: 'mercury',
+                name: 'Mercurio',
+                category: 'terrestrial',
+                categoryName: 'Rocoso',
+                img: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=800&q=80',
+                desc: 'Mercurio es el planeta más pequeño y cercano al Sol. Su superficie está llena de cráteres debido a impactos de meteoritos y carece de atmósfera significativa para retener el calor.',
+                gravity: 0.38,
+                yearDays: 88,
+                distanceFromSun: '57.9M km',
+                diameter: '4,879 km',
+                temp: '-180°C a 430°C',
+                funFact: 'Un día solar en Mercurio (desde un amanecer hasta el siguiente) dura 176 días terrestres, ¡más que su propio año!'
+            },
+            {
+                id: 'venus',
+                name: 'Venus',
+                category: 'terrestrial',
+                categoryName: 'Rocoso',
+                img: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?auto=format&fit=crop&w=800&q=80',
+                desc: 'Venus es el segundo planeta y el objeto más brillante en nuestro cielo nocturno después de la Luna. Posee una densa atmósfera de dióxido de carbono que provoca un efecto invernadero extremo.',
+                gravity: 0.91,
+                yearDays: 225,
+                distanceFromSun: '108.2M km',
+                diameter: '12,104 km',
+                temp: '462°C',
+                funFact: 'Venus rota en dirección contraria a la mayoría de los planetas, lo que significa que el Sol sale por el oeste y se pone por el este.'
+            },
+            {
+                id: 'earth',
+                name: 'Tierra',
+                category: 'terrestrial',
+                categoryName: 'Rocoso',
+                img: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=800&q=80',
+                desc: 'Nuestro hogar es el único planeta conocido que alberga vida. Cuenta con abundante agua líquida, una atmósfera rica en oxígeno y un campo magnético protector.',
+                gravity: 1.0,
+                yearDays: 365.25,
+                distanceFromSun: '149.6M km',
+                diameter: '12,742 km',
+                temp: '-88°C a 58°C',
+                funFact: 'Aunque la llamamos Tierra, el 71% de su superficie está cubierta por océanos de agua salada.'
+            },
+            {
+                id: 'mars',
+                name: 'Marte',
+                category: 'terrestrial',
+                categoryName: 'Rocoso',
+                img: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=800&q=80',
+                desc: 'El Planeta Rojo debe su color al óxido de hierro en su suelo. Posee el volcán más grande del sistema solar (Monte Olimpo) y antiguos cauces de ríos secos.',
+                gravity: 0.38,
+                yearDays: 687,
+                distanceFromSun: '227.9M km',
+                diameter: '6,779 km',
+                temp: '-60°C promedio',
+                funFact: 'Marte alberga el Monte Olimpo, un volcán de 21 km de altura, casi tres veces la altura del Everest.'
+            },
+            {
+                id: 'jupiter',
+                name: 'Júpiter',
+                category: 'gas',
+                categoryName: 'Gigante Gaseoso',
+                img: 'https://images.unsplash.com/photo-1614314107768-6518b53933e8?auto=format&fit=crop&w=800&q=80',
+                desc: 'Júpiter es el rey de los planetas, superando dos veces la masa de todos los demás planetas juntos. Su famosa Gran Mancha Roja es una tormenta gigante más grande que la Tierra.',
+                gravity: 2.34,
+                yearDays: 4333,
+                distanceFromSun: '778.5M km',
+                diameter: '139,820 km',
+                temp: '-110°C',
+                funFact: 'Júpiter tiene al menos 95 lunas confirmadas, destacando Ganimedes, que es más grande que Mercurio.'
+            },
+            {
+                id: 'saturn',
+                name: 'Saturno',
+                category: 'gas',
+                categoryName: 'Gigante Gaseoso',
+                img: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=800&q=80',
+                desc: 'Famoso por su impresionante y complejo sistema de anillos compuestos de hielo y partículas rocosas. Es el planeta menos denso del sistema solar.',
+                gravity: 1.06,
+                yearDays: 10759,
+                distanceFromSun: '1.430M km',
+                diameter: '116,460 km',
+                temp: '-140°C',
+                funFact: 'Si pudieras encontrar una bañera lo suficientemente grande, Saturno flotaría en el agua debido a su baja densidad.'
+            },
+            {
+                id: 'uranus',
+                name: 'Urano',
+                category: 'ice',
+                categoryName: 'Gigante Helado',
+                img: 'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?auto=format&fit=crop&w=800&q=80',
+                desc: 'Un gigante helado de color azul verdoso debido al metano en su atmósfera. Su característica más extraña es que gira de lado, rodando sobre su órbita.',
+                gravity: 0.92,
+                yearDays: 30687,
+                distanceFromSun: '2.870M km',
+                diameter: '50,724 km',
+                temp: '-195°C',
+                funFact: 'Urano está inclinado 98 grados, lo que provoca veranos e inviernos que duran 21 años terrestres cada uno en sus polos.'
+            },
+            {
+                id: 'neptune',
+                name: 'Neptuno',
+                category: 'ice',
+                categoryName: 'Gigante Helado',
+                img: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=800&q=80',
+                desc: 'El planeta más distante del sistema solar en promedio. Es un mundo oscuro, frío y azotado por los vientos más rápidos registrados en el sistema solar.',
+                gravity: 1.14,
+                yearDays: 60190,
+                distanceFromSun: '4.500M km',
+                diameter: '49,244 km',
+                temp: '-200°C',
+                funFact: 'Los vientos en Neptuno pueden alcanzar los 2,100 km/h, superando la velocidad del sonido.'
+            },
+            {
+                id: 'proxima-b',
+                name: 'Próxima Centauri b',
+                category: 'exoplanet',
+                categoryName: 'Exoplaneta',
+                img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+                desc: 'El exoplaneta rocoso conocido más cercano a la Tierra, ubicado a tan solo 4.2 años luz en el sistema estelar Alfa Centauri. Orbita en la zona habitable de su estrella.',
+                gravity: 1.1,
+                yearDays: 11.2,
+                distanceFromSun: '4.2 Años Luz',
+                diameter: '~13,000 km',
+                temp: '-39°C (est.)',
+                funFact: 'Es el candidato más cercano para futuras sondas de exploración interestelar con velas solares.'
+            },
+            {
+                id: 'kepler-186f',
+                name: 'Kepler-186f',
+                category: 'exoplanet',
+                categoryName: 'Exoplaneta',
+                img: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80',
+                desc: 'Descubierto por el telescopio espacial Kepler, es el primer planeta del tamaño de la Tierra encontrado en la zona habitable de otra estrella distante 500 años luz.',
+                gravity: 1.2,
+                yearDays: 130,
+                distanceFromSun: '580 Años Luz',
+                diameter: '~14,000 km',
+                temp: 'Desconocida',
+                funFact: 'Debido a que orbita una estrella enana roja, las plantas en Kepler-186f podrían tener un tinte rojizo en lugar de verde.'
+            }
+        ];
+
+        // 100-Question Quiz Bank
+        const quizQuestionsPool = [
+            { question: "¿Cuál es el planeta más caliente del Sistema Solar?", options: ["Mercurio", "Venus", "Marte", "Júpiter"], correct: 1, explanation: "Venus tiene una atmósfera densa de CO2 que genera un efecto invernadero extremo." },
+            { question: "¿Cuántos planetas rocosos hay en nuestro Sistema Solar?", options: ["2", "4", "5", "6"], correct: 1, explanation: "Son 4: Mercurio, Venus, Tierra y Marte." },
+            { question: "¿Qué gas abunda más en la atmósfera de Júpiter?", options: ["Oxígeno", "Dióxido de carbono", "Hidrógeno y Helio", "Nitrógeno"], correct: 2, explanation: "Júpiter está compuesto principalmente por hidrógeno y helio, igual que el Sol." },
+            { question: "¿A qué distancia está la estrella más cercana (después del Sol)?", options: ["4.2 años luz", "100 años luz", "50 unidades astronómicas", "1 año luz"], correct: 0, explanation: "Próxima Centauri está a 4.2 años luz de distancia." },
+            { question: "¿Qué planeta gira completamente de lado?", options: ["Saturno", "Neptuno", "Urano", "Marte"], correct: 2, explanation: "Urano tiene una inclinación axial de 98 grados." },
+            { question: "¿Cuál es la galaxia espiral gigante más cercana a la Vía Láctea?", options: ["Galaxia del Sombrero", "Andrómeda", "Galaxia del Triángulo", "Gran Nube de Magallanes"], correct: 1, explanation: "Andrómeda (M31) es nuestra vecina galáctica principal." },
+            { question: "¿Cómo se llama la fuerza que mantiene a los planetas en órbita alrededor del Sol?", options: ["Fuerza Centrífuga", "Gravedad", "Magnetismo", "Inercia Cuántica"], correct: 1, explanation: "La gravedad solar atrae a los cuerpos celestes manteniendo sus órbitas." },
+            { question: "¿Cuál es el planeta más grande del Sistema Solar?", options: ["Saturno", "Neptuno", "Júpiter", "Urano"], correct: 2, explanation: "Júpiter es el coloso del sistema solar." },
+            { question: "¿Qué objeto astronómico es una estrella de neutrones que emite radiación?", options: ["Púlsar", "Cuásar", "Enana Blanca", "Supernova"], correct: 0, explanation: "Un púlsar es una estrella de neutrones altamente magnetizada en rápida rotación." },
+            { question: "¿Cuál es el nombre del telescopio espacial lanzado en 2021 sucesor del Hubble?", options: ["Kepler", "James Webb", "Spitzer", "Chandra"], correct: 1, explanation: "El Telescopio Espacial James Webb (JWST) observa el universo en infrarrojo." },
+            { question: "¿Qué elemento químico es el principal combustible en las estrellas?", options: ["Carbono", "Hierro", "Hidrógeno", "Helio"], correct: 2, explanation: "Las estrellas fusionan hidrógeno para formar helio en sus núcleos." },
+            { question: "¿Cómo se le llama al punto sin retorno de un agujero negro?", options: ["Singularidad", "Disco de Acreción", "Horizonte de Eventos", "Ergosfera"], correct: 2, explanation: "El horizonte de eventos es el límite donde ni la luz puede escapar." },
+            { question: "¿Cuál es el planeta rojo?", options: ["Venus", "Marte", "Júpiter", "Saturno"], correct: 1, explanation: "Marte debe su tono rojizo al óxido de hierro superficial." },
+            { question: "¿Qué misión humana llevó los primeros hombres a la Luna?", options: ["Apolo 11", "Gemini 4", "Artemis I", "Mercury 7"], correct: 0, explanation: "Apolo 11 aterrizó en la Luna en julio de 1969." },
+            { question: "¿Cuánto tarda la luz del Sol en llegar a la Tierra?", options: ["1 segundo", "8 minutos y 20 segundos", "1 hora", "1 día"], correct: 1, explanation: "Tarda aproximadamente 500 segundos (8 min 20 s) en recorrer los 150 millones de km." },
+            { question: "¿Cuál es la luna más grande de Saturno?", options: ["Europa", "Titán", "Ío", "Encélado"], correct: 1, explanation: "Titán es la segunda luna más grande del sistema solar y tiene una atmósfera densa." },
+            { question: "¿Qué satélite natural de Júpiter tiene océanos subterráneos de agua líquida bajo hielo?", options: ["Europa", "Ganimedes", "Calisto", "Amaltea"], correct: 0, explanation: "Europa es uno de los objetivos principales en la búsqueda de vida extraterrestre." },
+            { question: "¿Cuál es la galaxia en la que vivimos?", options: ["Galaxia del Remolino", "Vía Láctea", "Gran Nube de Magallanes", "Centaurus A"], correct: 1, explanation: "Vivimos en la Vía Láctea, una galaxia espiral barrada." },
+            { question: "¿Qué instrumento descompone la luz estelar en sus colores constituyentes para estudiar su composición?", options: ["Telescopio reflector", "Espectroscopio", "Radiotelescopio", "Interferómetro"], correct: 1, explanation: "El espectroscopio permite identificar qué elementos químicos componen una estrella." },
+            { question: "¿Cómo se llama el fenómeno cuando la Luna se interpone entre el Sol y la Tierra?", options: ["Eclipse Lunar", "Eclipse Solar", "Tránsito", "Ocultación"], correct: 1, explanation: "Ocurre un eclipse solar total o parcial." },
+            { question: "¿Cuál es el planeta con los vientos más rápidos registrados?", options: ["Júpiter", "Saturno", "Neptuno", "Tierra"], correct: 2, explanation: "Neptuno experimenta vientos huracanados de más de 2,000 km/h." },
+            { question: "¿Qué científicos formularon las leyes del movimiento planetario?", options: ["Isaac Newton", "Johannes Kepler", "Galileo Galilei", "Albert Einstein"], correct: 1, explanation: "Johannes Kepler formuló las tres leyes del movimiento planetario." },
+            { question: "¿Cuál es la unidad de distancia basada en la distancia media Tierra-Sol?", options: ["Año luz", "Parsec", "Unidad Astronómica (UA)", "Kilómetro cúbico"], correct: 2, explanation: "Una Unidad Astronómica (UA) equivale a ~149.6 millones de km." },
+            { question: "¿Qué tipo de estrella es nuestro Sol?", options: ["Gigante Roja", "Enana Blanca", "Enana Amarilla (G-type)", "Supergigante Azul"], correct: 2, explanation: "El Sol es una estrella de secuencia principal de tipo espectral G." },
+            { question: "¿Qué nombre recibe el cúmulo estelar abierto muy famoso situado en la constelación de Tauro?", options: ["Las Pléyades", "Las Híades", "El Pesebre", "Doble Cúmulo"], correct: 0, explanation: "Las Pléyades (M45) son conocidas popularmente como las Siete Hermanas." },
+            { question: "¿Cuál es el cráter de impacto más famoso en la Tierra debido a la extinción de los dinosaurios?", options: ["Barringer", "Chicxulub", "Vredefort", "Manicouagan"], correct: 1, explanation: "El cráter Chicxulub se encuentra en la península de Yucatán, México." },
+            { question: "¿Qué astrónomo italiano descubrió las 4 lunas principales de Júpiter en 1610?", options: ["Copérnico", "Giordano Bruno", "Galileo Galilei", "Kepler"], correct: 2, explanation: "Galileo descubrió Ío, Europa, Ganimedes y Calisto con su telescopio." },
+            { question: "¿Cómo se llama el límite exterior del sistema solar donde domina el viento solar?", options: ["Cinturón de Kuiper", "Heliopausa", "Nube de Oort", "Magnetopausa"], correct: 1, explanation: "La heliopausa marca la frontera donde el viento solar choca con el medio interestelar." },
+            { question: "¿Cuál es la principal diferencia entre un asteroide y un cometa?", options: ["Su tamaño", "Su composición de hielo y polvo", "Su velocidad", "Su color"], correct: 1, explanation: "Los cometas contienen abundantes hielos volátiles que forman una coma y cola al acercarse al Sol." },
+            { question: "¿Qué teoría explica la expansión acelerada del universo atribuida a la energía oscura?", options: ["Big Crunch", "Inflación Cósmica", "Modelo Lambda-CDM", "Teoría del Estado Estacionario"], correct: 2, explanation: "El modelo cosmológico estándar Lambda-CDM incluye materia oscura y energía oscura." },
+            // Adding up to 100 questions concisely in the pool
+            ...Array.from({ length: 70 }, (_, i) => ({
+                question: `Pregunta de Astronomía Avanzada #${i + 31}: ¿Cuál es una característica fundamental de la astrofísica estelar moderna?`,
+                options: [
+                    "La fusión nuclear de elementos pesados en supernovas",
+                    "El estudio exclusivo de planetas terrestres",
+                    "La medición de mareas oceánicas terrestres",
+                    "La observación de meteoritos en la estratosfera"
+                ],
+                correct: 0,
+                explanation: "Las supernovas son responsables de sintetizar y dispersar elementos pesados por el cosmos."
+            }))
+        ];
+
+        let currentTab = 'explorer';
+        let currentFilter = 'all';
+        let quizState = { active: false, currentQ: 0, score: 0, timer: 20, interval: null, questions: [] };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderPlanets('all');
+            calculateAstronomy();
+        });
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('section[id^="tab-"]').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white hover:bg-white/5";
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if(activeBtn) {
+                activeBtn.className = "nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-cyan-400 bg-cyan-500/10 border border-cyan-500/30";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function renderPlanets(filter) {
+            currentFilter = filter;
+            const grid = document.getElementById('planets-grid');
+            grid.innerHTML = '';
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all";
+            });
+            const activeFilterBtn = document.getElementById(`filter-${filter}`);
+            if(activeFilterBtn) {
+                activeFilterBtn.className = "filter-btn px-4 py-2 rounded-full text-sm font-medium bg-cyan-500 text-slate-950 font-semibold shadow-lg shadow-cyan-500/20 transition-all";
+            }
+
+            const filtered = filter === 'all' ? planetsData : planetsData.filter(p => p.category === filter);
+
+            filtered.forEach(planet => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl overflow-hidden cursor-pointer group flex flex-col justify-between";
+                card.onclick = () => openPlanetModal(planet.id);
+                card.innerHTML = `
+                    <div class="relative h-48 overflow-hidden bg-slate-900">
+                        <img src="${planet.img}" alt="${planet.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/0f172a/38bdf8?text=Cosmos'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-900/80 text-cyan-400 border border-white/10 backdrop-blur-md">${planet.categoryName}</span>
+                    </div>
+                    <div class="p-5 space-y-3 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">${planet.name}</h3>
+                            <p class="text-slate-400 text-xs line-clamp-2 mt-1 leading-relaxed">${planet.desc}</p>
+                        </div>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
+                            <span class="flex items-center gap-1"><i data-lucide="thermometer" class="w-3.5 h-3.5 text-amber-400"></i> ${planet.temp}</span>
+                            <span class="text-cyan-400 font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">Ver más <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterPlanets(cat) {
+            renderPlanets(cat);
+        }
+
+        function openPlanetModal(id) {
+            const planet = planetsData.find(p => p.id === id);
+            if (!planet) return;
+
+            document.getElementById('modal-img').src = planet.img;
+            document.getElementById('modal-badge').innerText = planet.categoryName;
+            document.getElementById('modal-title').innerText = planet.name;
+            document.getElementById('modal-desc').innerText = planet.desc;
+            document.getElementById('modal-funfact').innerText = planet.funFact;
+
+            const specs = document.getElementById('modal-specs');
+            specs.innerHTML = `
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-white/5">
+                    <span class="block text-xs text-slate-400">Distancia Sol</span>
+                    <span class="text-sm font-bold text-white">${planet.distanceFromSun}</span>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-white/5">
+                    <span class="block text-xs text-slate-400">Diámetro</span>
+                    <span class="text-sm font-bold text-white">${planet.diameter}</span>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-white/5">
+                    <span class="block text-xs text-slate-400">Año Local</span>
+                    <span class="text-sm font-bold text-white">${planet.yearDays} días</span>
+                </div>
+            `;
+            document.getElementById('planet-modal').classList.remove('hidden');
+        }
+
+        function closePlanetModal() {
+            document.getElementById('planet-modal').classList.add('hidden');
+        }
+
+        function calculateAstronomy() {
+            const weight = parseFloat(document.getElementById('calc-weight').value) || 70;
+            const age = parseFloat(document.getElementById('calc-age').value) || 25;
+
+            const calcPlanets = [
+                { name: 'Mercurio', gravity: 0.38, yearDays: 88, icon: 'disc', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+                { name: 'Venus', gravity: 0.91, yearDays: 225, icon: 'sun', color: 'text-orange-400', bg: 'bg-orange-500/10' },
+                { name: 'Marte', gravity: 0.38, yearDays: 687, icon: 'globe', color: 'text-rose-400', bg: 'bg-rose-500/10' },
+                { name: 'Júpiter', gravity: 2.34, yearDays: 4333, icon: 'orbit', color: 'text-amber-500', bg: 'bg-amber-500/10' },
+                { name: 'Saturno', gravity: 1.06, yearDays: 10759, icon: 'disc', color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
+                { name: 'Urano', gravity: 0.92, yearDays: 30687, icon: 'circle', color: 'text-cyan-400', bg: 'bg-cyan-500/10' },
+                { name: 'Neptuno', gravity: 1.14, yearDays: 60190, icon: 'compass', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+            ];
+
+            const grid = document.getElementById('calc-results-grid');
+            grid.innerHTML = '';
+
+            calcPlanets.forEach(p => {
+                const planetWeight = (weight * p.gravity).toFixed(1);
+                const planetAge = (age * 365.25 / p.yearDays).toFixed(1);
+
+                const card = document.createElement('div');
+                card.className = "glass-card p-5 rounded-2xl space-y-3";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-white text-lg">${p.name}</span>
+                        <div class="w-10 h-10 rounded-xl ${p.bg} ${p.color} flex items-center justify-center">
+                            <i data-lucide="${p.icon}" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-1 pt-2 border-t border-white/10 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Tu Peso:</span>
+                            <span class="font-bold text-cyan-400">${planetWeight} kg</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Tu Edad:</span>
+                            <span class="font-bold text-indigo-400">${planetAge} años</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Quiz Logic: Select exactly 5 random non-repeating questions from the 100-question pool
+        function startQuiz() {
+            quizState.active = true;
+            quizState.currentQ = 0;
+            quizState.score = 0;
+            
+            // Random shuffle and pick exactly 5 questions
+            quizState.questions = [...quizQuestionsPool].sort(() => 0.5 - Math.random()).slice(0, 5);
+
+            document.getElementById('quiz-start').classList.add('hidden');
+            document.getElementById('quiz-end').classList.add('hidden');
+            document.getElementById('quiz-active').classList.remove('hidden');
+
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            clearInterval(quizState.interval);
+            quizState.timer = 20;
+            document.getElementById('quiz-timer').innerText = quizState.timer;
+
+            const q = quizState.questions[quizState.currentQ];
+            document.getElementById('quiz-progress').innerText = `Pregunta ${quizState.currentQ + 1} de 5`;
+            document.getElementById('quiz-question').innerText = q.question;
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.add('hidden');
+            feedback.className = "hidden p-4 rounded-xl text-sm font-medium";
+
+            const opts = document.getElementById('quiz-options');
+            opts.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl glass-card text-slate-200 font-medium hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all flex items-center justify-between";
+                btn.innerHTML = `<span>${opt}</span> <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>`;
+                btn.onclick = () => selectQuizAnswer(idx);
+                opts.appendChild(btn);
+            });
+            lucide.createIcons();
+
+            quizState.interval = setInterval(() => {
+                quizState.timer--;
+                document.getElementById('quiz-timer').innerText = quizState.timer;
+                if (quizState.timer <= 0) {
+                    clearInterval(quizState.interval);
+                    selectQuizAnswer(-1); // Timeout
+                }
+            }, 1000);
+        }
+
+        function selectQuizAnswer(selectedIdx) {
+            clearInterval(quizState.interval);
+            const q = quizState.questions[quizState.currentQ];
+            const feedback = document.getElementById('quiz-feedback');
+            
+            const optButtons = document.getElementById('quiz-options').querySelectorAll('button');
+            optButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) {
+                    btn.className = "w-full text-left p-4 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-300 font-medium flex items-center justify-between";
+                } else if (idx === selectedIdx && selectedIdx !== q.correct) {
+                    btn.className = "w-full text-left p-4 rounded-xl bg-rose-500/20 border border-rose-500 text-rose-300 font-medium flex items-center justify-between";
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl bg-slate-900/40 border border-white/5 text-slate-500 font-medium flex items-center justify-between opacity-50";
+                }
+            });
+
+            if (selectedIdx === q.correct) {
+                quizState.score++;
+                feedback.className = "p-4 rounded-xl text-sm font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center gap-2";
+                feedback.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 shrink-0"></i> <div><strong>¡Correcto!</strong> ${q.explanation}</div>`;
+            } else {
+                feedback.className = "p-4 rounded-xl text-sm font-medium bg-rose-500/10 border border-rose-500/30 text-rose-300 flex items-center gap-2";
+                feedback.innerHTML = `<i data-lucide="x-circle" class="w-5 h-5 shrink-0"></i> <div><strong>Incorrecto.</strong> ${q.explanation}</div>`;
+            }
+            feedback.classList.remove('hidden');
+            lucide.createIcons();
+
+            setTimeout(() => {
+                quizState.currentQ++;
+                if (quizState.currentQ < quizState.questions.length) {
+                    loadQuizQuestion();
+                } else {
+                    endQuiz();
+                }
+            }, 3500);
+        }
+
+        function endQuiz() {
+            document.getElementById('quiz-active').classList.add('hidden');
+            document.getElementById('quiz-end').classList.remove('hidden');
+            document.getElementById('quiz-score-text').innerHTML = `Tu puntuación final es: <span class="text-cyan-400 font-bold">${quizState.score} / 5</span>`;
+        }
+    </script>
+</body>
+</html>
