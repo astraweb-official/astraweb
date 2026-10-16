@@ -550,21 +550,7 @@
                 diameter: '~14,000 km',
                 temp: '-46°C estimado',
                 funFact: 'Al orbitar una estrella enana roja, la luz que recibe es más rojiza, por lo que las plantas en este mundo podrían realizar la fotosíntesis con un tinte rojo en lugar de verde.',
-            },
-            {
-                id: 'alpha-centauri',
-                name: 'Alfa Centauri',
-                category: 'star',
-                categoryName: 'Sistema estelar',
-                img: 'https://svs.gsfc.nasa.gov/vis/a020000/a020300/a020377/Shot_1-2_ProRes_notext.00018_print.jpg',
-                desc: 'Alfa Centauri es el sistema de estrellas más cercano al Sol. Está formado por tres estrellas: Alfa Centauri A, Alfa Centauri B y Próxima Centauri. Cada una tiene un tamaño y una temperatura diferentes.',
-                gravity: 'No se aplica a un sistema de estrellas',
-                yearDays: '80 años para completar una órbita entre A y B',
-                distanceFromSun: '4,3 años luz',
-                diameter: 'Tres estrellas de diferentes tamaños',
-                temp: 'Alfa Centauri A: 5.800 K; Alfa Centauri B: 5.234 K; Próxima Centauri: 2.900 K',
-                funFact: '¡Próxima Centauri es la estrella más cercana al Sol! Además, tiene planetas que orbitan a su alrededor. Alfa Centauri A y B giran una alrededor de la otra y tardan unos 80 años en completar una vuelta.'
-            },
+            }
         ];
 
         // 100-Question Quiz Bank
@@ -860,66 +846,15 @@
             document.getElementById('quiz-score-text').innerHTML = `Tu puntuación final es: <span class="text-cyan-400 font-bold">${quizState.score} / 5</span>`;
         }
 </script>
-   <!-- Sección de Suscripción -->
-
-<section id="suscripcion" style="background:#111827; color:#fff; padding:30px; border-radius:12px; text-align:center; margin:40px 0;">
-    <h2>🚀 ¡Suscríbete a AstraWeb!</h2>
-    <p>Recibe notificaciones en tu correo sobre nuevos descubrimientos y actualizaciones.</p>
-
-<form id="formulario-suscripcion" style="margin-top:15px;">
-    <input
-    type="email"
-    id="correo-suscriptor"
-    name="email"
-    placeholder="Escribe tu correo electrónico..."
-    required
-    style="padding:12px; width:70%; max-width:300px; border-radius:6px; border:none; outline:none; color:#111827 !important; background-color:#ffffff !important; font-size:16px; opacity:1;"
->
-    >
-
-    <button
-        type="submit"
-        style="padding:12px 20px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;"
-    >Suscribirme</button>
-</form>
-
-<p id="mensaje-suscripcion" role="status" style="margin-top:15px;"></p>
-
-</section>
-
-<script>
-document.getElementById('formulario-suscripcion').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const formulario = this;
-    const mensaje = document.getElementById('mensaje-suscripcion');
-    const boton = formulario.querySelector('button[type="submit"]');
-
-    mensaje.textContent = 'Enviando...';
-    boton.disabled = true;
-
-    try {
-        const respuesta = await fetch('https://formspree.io/f/mgaornjn', {
-            method: 'POST',
-            body: new FormData(formulario),
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-
-        if (respuesta.ok) {
-            mensaje.textContent = '¡Gracias por suscribirte a AstraWeb!';
-            formulario.reset();
-        } else {
-            mensaje.textContent = 'No se ha podido guardar tu correo. Inténtalo de nuevo.';
-        }
-    } catch (error) {
-        mensaje.textContent = 'Error de conexión. Inténtalo de nuevo más tarde.';
-    } finally {
-        boton.disabled = false;
-    }
-});
-</script>
+    <!-- Sección de Suscripción -->
+    <section id="suscripcion" style="background:#111827; color:#fff; padding:30px; border-radius:12px; text-align:center; margin:40px 0;">
+      <h2>🚀 ¡Suscríbete a AstraWeb!</h2>
+      <p>Recibe notificaciones en tu correo sobre nuevos descubrimientos y actualizaciones.</p>
+      <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" style="margin-top:15px;">
+        <input type="email" name="email" placeholder="Escribe tu correo electrónico..." required style="padding:12px; width:70%; max-width:300px; border-radius:6px; border:none; outline:none;">
+        <button type="submit" style="padding:12px 20px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Suscribirme</button>
+      </form>
+    </section>
 
     <!-- Contenido de las secciones legales -->
     <div id="politica-privacidad" style="background:#0f172a; color:#cbd5e1; padding:30px; margin:20px auto; max-width:800px; border-radius:12px; line-height:1.6;">
