@@ -873,15 +873,35 @@
 </section>
 
 <script>
-document.getElementById('formulario-suscripcion').addEventListener('submit', function(event) {
+document.getElementById('formulario-suscripcion').addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    const correo = document.getElementById('correo-suscriptor').value.trim();
+    const formulario = this;
     const mensaje = document.getElementById('mensaje-suscripcion');
+    const boton = formulario.querySelector('button[type="submit"]');
 
-    if (correo) {
-        mensaje.textContent = '¡Gracias por tu interés en AstraWeb! La suscripción por correo todavía no está activada.';
-        this.reset();
+    mensaje.textContent = 'Enviando...';
+    boton.disabled = true;
+
+    try {
+        const respuesta = await fetch('https://formspree.io/f/mgaornjn', {
+            method: 'POST',
+            body: new FormData(formulario),
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (respuesta.ok) {
+            mensaje.textContent = '¡Gracias por suscribirte a AstraWeb!';
+            formulario.reset();
+        } else {
+            mensaje.textContent = 'No se ha podido guardar tu correo. Inténtalo de nuevo.';
+        }
+    } catch (error) {
+        mensaje.textContent = 'Error de conexión. Inténtalo de nuevo más tarde.';
+    } finally {
+        boton.disabled = false;
     }
 });
 </script>
