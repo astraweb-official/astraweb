@@ -845,15 +845,45 @@
             document.getElementById('quiz-score-text').innerHTML = `Tu puntuación final es: <span class="text-cyan-400 font-bold">${quizState.score} / 5</span>`;
         }
 </script>
-    <!-- Sección de Suscripción -->
-    <section id="suscripcion" style="background:#111827; color:#fff; padding:30px; border-radius:12px; text-align:center; margin:40px 0;">
-      <h2>🚀 ¡Suscríbete a AstraWeb!</h2>
-      <p>Recibe notificaciones en tu correo sobre nuevos descubrimientos y actualizaciones.</p>
-      <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" style="margin-top:15px;">
-        <input type="email" name="email" placeholder="Escribe tu correo electrónico..." required style="padding:12px; width:70%; max-width:300px; border-radius:6px; border:none; outline:none;">
-        <button type="submit" style="padding:12px 20px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Suscribirme</button>
-      </form>
-    </section>
+   <!-- Sección de Suscripción -->
+
+<section id="suscripcion" style="background:#111827; color:#fff; padding:30px; border-radius:12px; text-align:center; margin:40px 0;">
+    <h2>🚀 ¡Suscríbete a AstraWeb!</h2>
+    <p>Recibe notificaciones en tu correo sobre nuevos descubrimientos y actualizaciones.</p>
+
+<form id="formulario-suscripcion" style="margin-top:15px;">
+    <input
+        type="email"
+        id="correo-suscriptor"
+        name="email"
+        placeholder="Escribe tu correo electrónico..."
+        required
+        style="padding:12px; width:70%; max-width:300px; border-radius:6px; border:none; outline:none;"
+    >
+
+    <button
+        type="submit"
+        style="padding:12px 20px; background:#3b82f6; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;"
+    >Suscribirme</button>
+</form>
+
+<p id="mensaje-suscripcion" role="status" style="margin-top:15px;"></p>
+
+</section>
+
+<script>
+document.getElementById('formulario-suscripcion').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const correo = document.getElementById('correo-suscriptor').value.trim();
+    const mensaje = document.getElementById('mensaje-suscripcion');
+
+    if (correo) {
+        mensaje.textContent = '¡Gracias por tu interés en AstraWeb! La suscripción por correo todavía no está activada.';
+        this.reset();
+    }
+});
+</script>
 
     <!-- Contenido de las secciones legales -->
     <div id="politica-privacidad" style="background:#0f172a; color:#cbd5e1; padding:30px; margin:20px auto; max-width:800px; border-radius:12px; line-height:1.6;">
