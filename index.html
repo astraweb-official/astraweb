@@ -739,6 +739,38 @@
                 explanation: "Las supernovas son responsables de sintetizar y dispersar elementos pesados por el cosmos."
             }))
         ];
+        // SISTEMA DE PREGUNTAS ALEATORIAS SIN REPETIR
+
+let preguntasMezcladas = [];
+let indicePregunta = 0;
+
+function mezclarPreguntas() {
+   preguntasMezcladas = [...quizQuestionsPool];
+
+    for (let i = preguntasMezcladas.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [preguntasMezcladas[i], preguntasMezcladas[j]] =
+        [preguntasMezcladas[j], preguntasMezcladas[i]];
+    }
+
+    indicePregunta = 0;
+}
+
+function obtenerPreguntasPartida(cantidad = 5) {
+    const seleccion = [];
+
+    for (let i = 0; i < cantidad; i++) {
+        if (indicePregunta >= preguntasMezcladas.length) {
+            mezclarPreguntas();
+        }
+
+        seleccion.push(preguntasMezcladas[indicePregunta]);
+        indicePregunta++;
+    }
+
+    return seleccion;
+}
 
         let currentTab = 'explorer';
         let currentFilter = 'all';
@@ -899,7 +931,7 @@
             quizState.score = 0;
             
             // Random shuffle and pick exactly 5 questions
-            quizState.questions = [...quizQuestionsPool].sort(() => 0.5 - Math.random()).slice(0, 5);
+           quizState.questions = obtenerPreguntasPartida(5);
 
             document.getElementById('quiz-start').classList.add('hidden');
             document.getElementById('quiz-end').classList.add('hidden');
