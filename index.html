@@ -833,26 +833,13 @@
     { question: "¿A cuántos años luz aproximadamente se encuentra Vega?", options: ["4,2", "25", "100", "500"], correct: 1, explanation: "Vega está situada a unos 25 años luz de la Tierra." },
     { question: "¿Qué fenómeno ocurre cuando un planeta pasa por delante de su estrella desde nuestra perspectiva?", options: ["Supernova", "Tránsito", "Eclipse lunar", "Conjunción galáctica"], correct: 1, explanation: "Durante un tránsito, el planeta pasa delante de su estrella y puede producir una pequeña disminución de su brillo aparente." }
 ];
-            // Adding up to 100 questions concisely in the pool
-            ...Array.from({ length: 70 }, (_, i) => ({
-                question: `Pregunta de Astronomía Avanzada #${i + 31}: ¿Cuál es una característica fundamental de la astrofísica estelar moderna?`,
-                options: [
-                    "La fusión nuclear de elementos pesados en supernovas",
-                    "El estudio exclusivo de planetas terrestres",
-                    "La medición de mareas oceánicas terrestres",
-                    "La observación de meteoritos en la estratosfera"
-                ],
-                correct: 0,
-                explanation: "Las supernovas son responsables de sintetizar y dispersar elementos pesados por el cosmos."
-            }))
-        ];
-        // SISTEMA DE PREGUNTAS ALEATORIAS SIN REPETIR
+       // SISTEMA DE PREGUNTAS ALEATORIAS SIN REPETIR
 
 let preguntasMezcladas = [];
 let indicePregunta = 0;
 
 function mezclarPreguntas() {
-   preguntasMezcladas = [...quizQuestionsPool];
+    preguntasMezcladas = [...quizQuestionsPool];
 
     for (let i = preguntasMezcladas.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -879,14 +866,16 @@ function obtenerPreguntasPartida(cantidad = 5) {
     return seleccion;
 }
 
-        let currentTab = 'explorer';
-        let currentFilter = 'all';
-        let quizState = { active: false, currentQ: 0, score: 0, timer: 20, interval: null, questions: [] };
+mezclarPreguntas();
 
-        window.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            renderPlanets('all');
-            calculateAstronomy();
+let currentTab = 'explorer';
+let currentFilter = 'all';
+let quizState = { active: false, currentQ: 0, score: 0, timer: 20, interval: null, questions: [] };
+
+window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    renderPlanets('all');
+    calculateAstronomy();
         });
 
         function switchTab(tabId) {
