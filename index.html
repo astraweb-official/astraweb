@@ -127,6 +127,7 @@
             <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
                 <button onclick="filterPlanets('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-cyan-500 text-slate-950 font-semibold shadow-lg shadow-cyan-500/20 transition-all">Todos</button>
                 <button onclick="filterPlanets('constellation')" id="filter-constellation" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Constelaciones</button>
+                <button onclick="filterPlanets('cluster')" id="filter-cluster" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Cúmulos estelares</button>
                 <button onclick="filterPlanets('star')" id="filter-star" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Estrellas</button>
                 <button onclick="filterPlanets('exoplanet')" id="filter-exoplanet" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Exoplanetas</button>
                 <button onclick="filterPlanets('nebulae')" id="filter-nebulae" class="filter-btn px-4 py-2 rounded-full text-sm font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Nebulosas</button>
@@ -1122,7 +1123,7 @@
                 name: 'Nebulosa del Anillo (M57)',
                 category: 'nebulae',
                 categoryName: 'Nebulosa',
-                img: 'https://www.unistellar.com/wp-content/uploads/2022/10/ring-nebula-nicole-ruel-jacques-berard.jpeg',
+                img:  'https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/outreach/migrated/2023/STScI-01H82GA3NGYKC2E6PN815BF8B4.png?fit=clip&h=2000&w=1972',
                 desc: 'Nebulosa planetaria situada en la constelación de Lira. Está formada por las capas exteriores de gas expulsadas por una estrella en sus últimas etapas.',
                 gravity: 0,
                 yearDays: null,
@@ -1524,6 +1525,124 @@
                 diameter: '11.710 km aproximadamente',
                 temp: 'Aproximadamente 0 °C (temperatura de equilibrio estimada)',
                 funFact: 'Fue anunciado en 2023 y tiene aproximadamente el 92 % del radio terrestre.'
+            },
+            {
+                id: 'ic-1848',
+                name: 'Cúmulo estelar IC 1848',
+                category: 'cluster',
+                categoryName: 'Cúmulo estelar',
+                parentId: 'soul-nebula',
+                img: 'https://assets.science.nasa.gov/dynamicimage/assets/science/psd/photojournal/pia/pia13/pia13014/PIA13014.jpg',
+                desc: 'Agrupación de estrellas jóvenes relacionada con la región de formación estelar de la Nebulosa del Alma.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'Aprox. 6.500 años luz',
+                diameter: 'No disponible',
+                temp: 'No disponible',
+                funFact: 'Contiene numerosas estrellas jóvenes. No es un sistema solar.'
+            },
+            {
+                id: 'hd-17505',
+                name: 'HD 17505',
+                category: 'system',
+                categoryName: 'Sistema estelar múltiple',
+                parentId: 'soul-nebula',
+                img: 'https://placehold.co/600x400/080b1a/ffffff?text=HD+17505',
+                desc: 'Sistema estelar múltiple situado en la región W5, relacionada con la Nebulosa del Alma.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'Aprox. 6.500 años luz',
+                diameter: 'No disponible',
+                temp: 'Estrellas muy calientes',
+                funFact: 'Está formado por varias estrellas relacionadas gravitacionalmente.'
+            },
+            {
+                id: 'hd-17520',
+                name: 'HD 17520',
+                category: 'star',
+                categoryName: 'Estrella',
+                parentId: 'soul-nebula',
+                img: 'https://placehold.co/600x400/080b1a/ffffff?text=HD+17520',
+                desc: 'Estrella identificada en la región W5, cerca de la Nebulosa del Alma.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'No disponible individualmente',
+                diameter: 'No disponible',
+                temp: 'No disponible',
+                funFact: 'Es una estrella de tipo O9 V.'
+            },
+            {
+                id: 'hd-237019',
+                name: 'HD 237019',
+                category: 'star',
+                categoryName: 'Estrella',
+                parentId: 'soul-nebula',
+                img: 'https://placehold.co/600x400/080b1a/ffffff?text=HD+237019',
+                desc: 'Estrella masiva relacionada con la región W5 West.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'No disponible individualmente',
+                diameter: 'No disponible',
+                temp: 'No disponible',
+                funFact: 'Pertenece a la población de estrellas masivas de esta región.'
+            },
+            {
+                id: 'bd-60-586',
+                name: 'BD +60 586',
+                category: 'star',
+                categoryName: 'Estrella',
+                parentId: 'soul-nebula',
+                img: 'https://placehold.co/600x400/080b1a/ffffff?text=BD+60+586',
+                desc: 'Estrella masiva situada en la región W5 West.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'No disponible individualmente',
+                diameter: 'No disponible',
+                temp: 'No disponible',
+                funFact: 'Es una estrella de tipo O7.5 V.'
+            },
+            {
+                id: 'soul-nebula',
+                name: 'Nebulosa del Alma',
+                category: 'nebulae',
+                categoryName: 'Nebulosa',
+                img: 'https://assets.science.nasa.gov/dynamicimage/assets/science/psd/photojournal/pia/pia13/pia13014/PIA13014.jpg',
+                desc: 'La Nebulosa del Alma (IC 1848) es una enorme región de gas y polvo donde nacen nuevas estrellas.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'Aprox. 6.500 años luz',
+                diameter: 'Más de 150 años luz',
+                temp: 'No disponible',
+                funFact: 'Forma parte de la región de formación estelar W5, en la constelación de Casiopea.'
+            },
+            {
+                id: 'ngc-6543-central-star',
+                name: 'Estrella central de NGC 6543',
+                category: 'star',
+                categoryName: 'Estrella central',
+                parentId: 'cats-eye-nebula',
+                img: 'https://science.nasa.gov/wp-content/uploads/2023/04/c6-1-jpg.webp',
+                desc: 'Estrella central de la Nebulosa Ojo de Gato. Es el núcleo caliente de la estrella que expulsó sus capas exteriores.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'Aprox. 3.000 años luz',
+                diameter: 'No disponible',
+                temp: 'Aprox. 80.000 °C',
+                funFact: 'Es una estrella en una etapa avanzada de su evolución. No tiene exoplanetas confirmados.'
+            },
+            {
+                id: 'cats-eye-nebula',
+                name: 'Nebulosa Ojo de Gato',
+                category: 'nebulae',
+                categoryName: 'Nebulosa',
+                img: 'https://science.nasa.gov/wp-content/uploads/2023/04/c6-1-jpg.webp',
+                desc: 'La Nebulosa Ojo de Gato (NGC 6543) es una nebulosa planetaria formada por el material expulsado por una estrella.',
+                gravity: null,
+                yearDays: null,
+                distanceFromSun: 'Aprox. 3.000 años luz',
+                diameter: 'Aprox. 0,4 años luz',
+                temp: 'No disponible',
+                funFact: 'Su estructura está formada por varias capas de gas expulsadas durante la evolución de su estrella central.'
             },
         ];
 
